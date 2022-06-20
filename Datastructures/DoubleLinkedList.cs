@@ -4,13 +4,13 @@ using System.Text;
 namespace Datastructures;
 
 /// <summary>
-/// A singly linked list.
+/// A double linked list.
 /// </summary>
 /// <typeparam name="T">Generic type</typeparam>
 public class DoubleLinkedList<T> : IEnumerable<T>
 {
     /// <summary>
-    /// A element of the singly linked list.
+    /// A element of the double linked list.
     /// </summary>
     /// <typeparam name="TS">Type of the list</typeparam>
     public class ListElement<TS>
