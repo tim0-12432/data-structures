@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections;
+using System.Text;
 
 namespace Datastructures;
 
@@ -6,7 +7,7 @@ namespace Datastructures;
 /// Stack.
 /// </summary>
 /// <typeparam name="T">Generic type</typeparam>
-public class Stack<T>
+public class Stack<T> : IEnumerable<T>
 {
     private static readonly uint MAX_STACK = 1000;
     private T[] stack;
@@ -71,16 +72,30 @@ public class Stack<T>
     }
 
     /// <summary>
+    /// Get the enumerator of the stack.
+    /// </summary>
+    /// <returns>Enumerator</returns>
+    public IEnumerator<T> GetEnumerator()
+    {
+        for (int i = (int)topOfStack - 1; i >= 0; i--)
+            yield return stack[i];
+    }
+
+    /// <summary>
     /// String representation of the stack.
     /// </summary>
     /// <returns>String representation</returns>
     public override string ToString()
     {
         StringBuilder builder = new StringBuilder("Stack=[");
-        for (int i = 0; i < topOfStack - 2; i++)
+        for (int i = 0; i < topOfStack; i++)
             builder.Append($"{stack[i]},");
-        builder.Append(stack[topOfStack - 1]);
-        builder.Append("]");
-        return builder.ToString();
+        builder.Remove(builder.Length - 1, 1);
+        return builder.Append("]").ToString();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

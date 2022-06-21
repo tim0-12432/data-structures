@@ -15,7 +15,7 @@
 
 ## Stack :heavy_check_mark:
 
-## Queue :x:
+## Queue :heavy_check_mark:
 
 ## Hashmap :x:
 

@@ -30,4 +30,19 @@ public class StackTest
         Assert.AreEqual(7, stack.Pop());
         Assert.AreEqual(6, stack.Pop());
     }
+    
+    [Test]
+    public void TestIterator()
+    {
+        Datastructures.Stack<int> stack = new Datastructures.Stack<int>();
+        for (int i = 0; i <= 10; i++)
+            stack.Push(i);
+        Console.WriteLine(stack);
+        foreach (int number in stack)
+        {
+            Assert.True(number >= 0 & number <= 10);
+            Console.Write($"{number} ");
+        }
+        Console.WriteLine();
+    }
 }
