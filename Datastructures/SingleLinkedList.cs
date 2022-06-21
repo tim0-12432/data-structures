@@ -198,6 +198,15 @@ public class SingleLinkedList<T> : IEnumerable<T>
     }
     
     /// <summary>
+    /// Clear the list.
+    /// </summary>
+    public void ClearAll()
+    {
+        _first = null;
+        Length = 0;
+    }
+    
+    /// <summary>
     /// Check if data exists in list.
     /// </summary>
     /// <param name="data">Data</param>
@@ -243,7 +252,7 @@ public class SingleLinkedList<T> : IEnumerable<T>
     /// <returns>String representation</returns>
     public override String ToString() {
         ListElement<T> current = _first;
-        StringBuilder result = new StringBuilder("List=[" + current.Data);
+        StringBuilder result = new StringBuilder("List=[" + (current != null ? current.Data : ""));
         if (current != null)
             current = current.Successor;
         while (current != null) {

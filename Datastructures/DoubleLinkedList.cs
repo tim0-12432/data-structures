@@ -204,6 +204,15 @@ public class DoubleLinkedList<T> : IEnumerable<T>
     {
         return Delete(element.Data);
     }
+
+    /// <summary>
+    /// Clear the list.
+    /// </summary>
+    public void ClearAll()
+    {
+        _first = _last = null;
+        Length = 0;
+    }
     
     /// <summary>
     /// Check if data exists in list.
@@ -251,7 +260,7 @@ public class DoubleLinkedList<T> : IEnumerable<T>
     /// <returns>String representation</returns>
     public override String ToString() {
         ListElement<T> current = _first;
-        StringBuilder result = new StringBuilder("List=[" + current.Data);
+        StringBuilder result = new StringBuilder("List=[" + (current != null ? current.Data : ""));
         if (current != null)
             current = current.Successor;
         while (current != null) {

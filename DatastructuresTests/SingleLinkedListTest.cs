@@ -32,6 +32,9 @@ public class SingleLinkedListTest
         list.Delete(3);
         Assert.AreEqual(10, list.Length);
         Assert.AreEqual(0, list.Contains(3));
+        list.ClearAll();
+        Assert.AreEqual(0, list.Length);
+        Console.WriteLine(list);
     }
 
     [Test]
