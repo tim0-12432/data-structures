@@ -2,11 +2,15 @@
 
 ## Single linked list :heavy_check_mark:
 
+![single linked list](./doc/images/single-linked-list.png)
+
 |Reference|Note|
 |---|---|
 |Successor|the following element in the list|
 
 ## Double linked list :heavy_check_mark:
+
+![double linked list](./doc/images/double-linked-list.png)
 
 |Reference|Note|
 |---|---|
@@ -15,9 +19,15 @@
 
 ## Stack :heavy_check_mark:
 
+![stack](./doc/images/stack.png)
+
 ## Queue :heavy_check_mark:
 
-## Hashmap :x:
+![queue](./doc/images/queue.png)
+
+## Hashtable :heavy_check_mark:
+
+![hashtable](./doc/images/hashtable.png)
 
 ## Binary Tree :x:
 

@@ -20,7 +20,7 @@ public class QueueTest
     public void TestDelete()
     {
         Datastructures.Queue<int> queue = new Datastructures.Queue<int>();
-        Assert.Throws<ArgumentOutOfRangeException>(delegate { queue.Dequeue(); });
+        Assert.Throws<InvalidOperationException>(delegate { queue.Dequeue(); });
         for (int i = 0; i <= 10; i++)
             queue.Enqueue(i);
         Console.WriteLine(queue);

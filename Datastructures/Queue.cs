@@ -7,9 +7,9 @@ namespace Datastructures;
 /// Queue implementation based on a list.
 /// </summary>
 /// <typeparam name="T">Type</typeparam>
-public class Queue<T> : IEnumerable<T>
+public class Queue<T> : IEnumerable<T> where T : new()
 {
-    private List<T> queue = new List<T>();
+    private LinkedList<T> queue = new LinkedList<T>();
 
     /// <summary>
     /// Adds a element to the end of the queue.
@@ -17,7 +17,7 @@ public class Queue<T> : IEnumerable<T>
     /// <param name="data">Element</param>
     public void Enqueue(T data)
     {
-        queue.Add(data);
+        queue.AddLast(data);
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public class Queue<T> : IEnumerable<T>
     /// <returns>The next element</returns>
     public T Peek()
     {
-        return queue[0];
+        return queue.First == null ? new T() : queue.First.Value;
     }
 
     /// <summary>
@@ -47,8 +47,8 @@ public class Queue<T> : IEnumerable<T>
     /// <returns>First element</returns>
     public T Dequeue()
     {
-        T element = queue[0];
-        queue.RemoveAt(0);
+        T element = queue.First == null ? new T() : queue.First.Value;
+        queue.RemoveFirst();
         return element;
     }
 
