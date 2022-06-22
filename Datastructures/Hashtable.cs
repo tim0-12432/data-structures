@@ -2,11 +2,18 @@
 
 namespace Datastructures;
 
+/// <summary>
+/// A hashtable.
+/// </summary>
+/// <typeparam name="T">Type</typeparam>
 public class Hashtable<T> where T : new()
 {
     private static readonly int MAX_TABLE_SIZE = 50;
     private LinkedList<T>[] table = new LinkedList<T>[MAX_TABLE_SIZE];
 
+    /// <summary>
+    /// Constructor.
+    /// </summary>
     public Hashtable()
     {
         for (int i = 0; i < MAX_TABLE_SIZE; i++)
@@ -15,12 +22,21 @@ public class Hashtable<T> where T : new()
         }
     }
 
+    /// <summary>
+    /// Insert a element.
+    /// </summary>
+    /// <param name="data">Data of the element</param>
     public void Insert(T data)
     {
         int index = GetHash(data);
         table[index].AddFirst(data);
     }
 
+    /// <summary>
+    /// Delete data from the hashtable.
+    /// </summary>
+    /// <param name="data">Data to search for</param>
+    /// <returns>The removed data</returns>
     public T Delete(T data)
     {
         int index = GetHash(data);
@@ -29,6 +45,11 @@ public class Hashtable<T> where T : new()
         return element == null ? new T() : element.Value;
     }
 
+    /// <summary>
+    /// Search for an element in the hashtable.
+    /// </summary>
+    /// <param name="data">Data to search for</param>
+    /// <returns>Found data</returns>
     public T Search(T data)
     {
         int index = GetHash(data);
@@ -36,6 +57,10 @@ public class Hashtable<T> where T : new()
         return element == null ? new T() : element.Value;
     }
 
+    /// <summary>
+    /// String representation of the hashtable.
+    /// </summary>
+    /// <returns>The string representation</returns>
     public override string ToString()
     {
         StringBuilder builder = new StringBuilder("Hashtable=[");
