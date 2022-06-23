@@ -1,5 +1,9 @@
 # Datastructures
 
+[![Tests](https://github.com/tim0-12432/data-structures/actions/workflows/dotnet.yml/badge.svg)](https://github.com/tim0-12432/data-structures/actions/workflows/dotnet.yml)
+
+Originated through my preparation for the exams in modules `Object-Oriented Programming` and `Algorithms and Datastructures`. 
+
 ## Single linked list :heavy_check_mark:
 
 ![single linked list](./doc/images/single-linked-list.png)
@@ -29,7 +33,7 @@
 
 ![hashtable](./doc/images/hashtable.png)
 
-## Binary Tree :x:
+## Binary Tree :heavy_check_mark:
 
 ## Red-Black-Tree :x:
 
