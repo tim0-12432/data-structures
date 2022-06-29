@@ -107,6 +107,7 @@ public class DoubleLinkedList<T> : IEnumerable<T>
         }
         Length++;
     }
+    
     /// <summary>
     /// Append element at the end of the list.
     /// </summary>
@@ -132,6 +133,7 @@ public class DoubleLinkedList<T> : IEnumerable<T>
         }
         Length++;
     }
+    
     /// <summary>
     /// Insert element at the start of the list.
     /// </summary>
@@ -159,6 +161,7 @@ public class DoubleLinkedList<T> : IEnumerable<T>
         current.Successor = insertion;
         Length++;
     }
+    
     /// <summary>
     /// Insert data after another element.
     /// </summary>
@@ -194,6 +197,7 @@ public class DoubleLinkedList<T> : IEnumerable<T>
         Length--;
         return current.Data;
     }
+    
     /// <summary>
     /// Delete a element with given data.
     /// </summary>
@@ -229,6 +233,7 @@ public class DoubleLinkedList<T> : IEnumerable<T>
         }
         return amount;
     }
+    
     /// <summary>
     /// Check if data exists in list.
     /// </summary>

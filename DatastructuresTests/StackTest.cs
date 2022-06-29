@@ -12,7 +12,7 @@ public class StackTest
             stack.Push(i);
         Console.WriteLine(stack);
         Assert.False(stack.IsEmpty());
-        Assert.AreEqual(11, stack.Height());
+        Assert.AreEqual(11, stack.Height);
         Assert.AreEqual(10, stack.Peek());
     }
     
@@ -44,5 +44,18 @@ public class StackTest
             Console.Write($"{number} ");
         }
         Console.WriteLine();
+    }
+    
+    [Test]
+    public void TestReverse()
+    {
+        Datastructures.Stack<int> stack = new Datastructures.Stack<int>();
+        for (int i = 0; i <= 10; i++)
+            stack.Push(i);
+        Console.WriteLine(stack);
+        stack.Reverse();
+        Console.WriteLine(stack);
+        for (int i = 0; i <= 10; i++)
+            Assert.AreEqual(i, stack.Pop());
     }
 }

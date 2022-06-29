@@ -9,24 +9,38 @@ namespace Datastructures;
 /// <typeparam name="T">Generic type</typeparam>
 public class Stack<T> : IEnumerable<T>
 {
-    private static readonly uint MAX_STACK = 1000;
-    private T[] stack;
-    private uint topOfStack;
-
     /// <summary>
-    /// Constructor.
+    /// A element of this stack.
     /// </summary>
-    public Stack()
+    public class StackElement
     {
-        stack = new T[MAX_STACK];
-        topOfStack = 0;
+        /// <summary>
+        /// Next element in stack.
+        /// </summary>
+        public StackElement Next { get; set; } = null;
+        
+        /// <summary>
+        /// Data of this element.
+        /// </summary>
+        public T Data { get; private set; }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="data">Data of this element</param>
+        public StackElement(T data)
+        {
+            Data = data;
+        }
     }
+    
+    private StackElement topOfStack = null;
 
     /// <summary>
     /// Height of this stack.
     /// </summary>
     /// <returns>The height</returns>
-    public int Height() => (int)topOfStack;
+    public int Height { get; private set; } = 0;
 
     /// <summary>
     /// Insert data on top of the stack.
@@ -35,10 +49,13 @@ public class Stack<T> : IEnumerable<T>
     /// <exception cref="StackOverflowException">Stack is filled</exception>
     public void Push(T data)
     {
-        if (topOfStack > MAX_STACK)
-            throw new StackOverflowException("Stack is completely filled!");
-        stack[topOfStack] = data;
-        topOfStack++;
+        StackElement neu = new StackElement(data);
+        if (topOfStack != null)
+        {
+            neu.Next = topOfStack;
+        }
+        topOfStack = neu;
+        Height++;
     }
 
     /// <summary>
@@ -48,16 +65,19 @@ public class Stack<T> : IEnumerable<T>
     /// <exception cref="InvalidOperationException">Stack is empty</exception>
     public T Pop()
     {
-        if (topOfStack == 0)
-            throw new InvalidOperationException("Stack is empty!");
-        return stack[--topOfStack];
+        StackElement elem = topOfStack;
+        if (elem == null)
+            throw new InvalidOperationException("Cannot pop from empty Stack!");
+        topOfStack = elem.Next;
+        Height--;
+        return elem.Data;
     }
 
     /// <summary>
     /// Checks if stack is empty.
     /// </summary>
     /// <returns>Is empty</returns>
-    public bool IsEmpty() => topOfStack == 0;
+    public bool IsEmpty() => topOfStack == null;
 
     /// <summary>
     /// Get the element on top of the stack.
@@ -66,9 +86,30 @@ public class Stack<T> : IEnumerable<T>
     /// <exception cref="InvalidOperationException">Stack is empty</exception>
     public T Peek()
     {
-        if (topOfStack == 0)
+        if (topOfStack == null)
             throw new InvalidOperationException("Stack is empty!");
-        return stack[topOfStack - 1];
+        return topOfStack.Data;
+    }
+    
+    /// <summary>
+    /// Reverse the stack.
+    /// </summary>
+    public void Reverse()
+    {
+        StackElement elem = topOfStack;
+        if (elem != null && elem.Next != null)
+        {
+            StackElement before = null;
+            while (elem != null)
+            {
+                StackElement next = elem.Next;
+                elem.Next = before;
+                before = elem;
+                elem = next;
+            }
+
+            topOfStack = before;
+        }
     }
 
     /// <summary>
@@ -77,8 +118,12 @@ public class Stack<T> : IEnumerable<T>
     /// <returns>Enumerator</returns>
     public IEnumerator<T> GetEnumerator()
     {
-        for (int i = (int)topOfStack - 1; i >= 0; i--)
-            yield return stack[i];
+        StackElement current = topOfStack;
+        while (current != null)
+        {
+            yield return current.Data;
+            current = current.Next;
+        }
     }
 
     /// <summary>
@@ -88,8 +133,12 @@ public class Stack<T> : IEnumerable<T>
     public override string ToString()
     {
         StringBuilder builder = new StringBuilder("Stack=[");
-        for (int i = 0; i < topOfStack; i++)
-            builder.Append($"{stack[i]},");
+        StackElement current = topOfStack;
+        while (current != null)
+        {
+            builder.Append($"{current.Data},");
+            current = current.Next;
+        }
         builder.Remove(builder.Length - 1, 1);
         return builder.Append("]").ToString();
     }
