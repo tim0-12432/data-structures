@@ -40,3 +40,5 @@ Originated through my preparation for the exams in modules `Object-Oriented Prog
 ## B-Tree :x:
 
 ## Heap :x:
+
+## Fibonacci-Heap :x:
