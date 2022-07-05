@@ -12,8 +12,7 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
     /// <summary>
     /// A single tree node.
     /// </summary>
-    /// <typeparam name="T">Same type as the tree</typeparam>
-    public class Node<T>
+    public class Node
     {
         /// <summary>
         /// Data to contain.
@@ -23,17 +22,17 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
         /// <summary>
         /// Parent of the node.
         /// </summary>
-        public Node<T> Parent { get; set; }
+        public Node Parent { get; set; }
         
         /// <summary>
         /// Left child of the node.
         /// </summary>
-        public Node<T> LeftChild { get; set; }
+        public Node LeftChild { get; set; }
         
         /// <summary>
         /// Right child of the node.
         /// </summary>
-        public Node<T> RightChild { get; set; }
+        public Node RightChild { get; set; }
 
         /// <summary>
         /// Constructor.
@@ -49,17 +48,17 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
     /// <summary>
     /// Height of the tree;
     /// </summary>
-    public int Height { get; private set; }
+    public int Height { get; protected set; }
 
-    private Node<T> root = null;
+    protected Node root = null;
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    /// <param name="root">Root node.</param>
+    /// <param name="root">Root node</param>
     public BinaryTree(T root)
     {
-        Node<T> node = new Node<T>(root);
+        Node node = new Node(root);
         this.root = node;
         Height = 1;
     }
@@ -78,31 +77,40 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
     /// <param name="data">Data for the new node</param>
     public void Insert(T data)
     {
-        Node<T> newElement = new Node<T>(data);
-        Node<T> current = root;
-        Node<T> element = null;
+        Node newElement = new Node(data);
+        Insert(newElement);
+    }
+
+    /// <summary>
+    /// Insert a new node in the tree.
+    /// </summary>
+    /// <param name="node">New node to insert</param>
+    public void Insert(Node node)
+    {
+        Node current = root;
+        Node element = null;
         int newHeight = 1;
         while (current != null)
         {
             element = current;
-            if (newElement.Data.CompareTo(current.Data) == -1)
+            if (node.Data.CompareTo(current.Data) == -1)
                 current = current.LeftChild;
             else
                 current = current.RightChild;
             newHeight++;
         }
-        newElement.Parent = element;
+        node.Parent = element;
         if (element == null)
         {
-            root = newElement;
+            root = node;
             newHeight = 1;
         }
         else
         {
-            if (newElement.Data.CompareTo(element.Data) == -1)
-                element.LeftChild = newElement;
+            if (node.Data.CompareTo(element.Data) == -1)
+                element.LeftChild = node;
             else
-                element.RightChild = newElement;
+                element.RightChild = node;
         }
 
         if (newHeight > Height)
@@ -114,10 +122,10 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
     /// </summary>
     /// <param name="element">Node to remove</param>
     /// <returns>The removed data</returns>
-    public T Delete(Node<T> element)
+    public T Delete(Node element)
     {
-        Node<T> parent = element.Parent;
-        Node<T> transplantation = null;
+        Node parent = element.Parent;
+        Node transplantation = null;
         if (element.LeftChild == null && element.RightChild == null)
             transplantation = null;
         else if (element.LeftChild != null && element.RightChild == null)
@@ -126,7 +134,7 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
             transplantation = element.RightChild;
         else
         {
-            Node<T> min = Minimum(element.RightChild);
+            Node min = Minimum(element.RightChild);
             min.LeftChild = element.LeftChild;
             transplantation = min;
         }
@@ -137,6 +145,8 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
             parent.LeftChild = transplantation;
         else
             parent.RightChild = transplantation;
+        if (parent != null)
+            transplantation.Parent = parent;
         return element.Data;
     }
 
@@ -145,11 +155,11 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
     /// </summary>
     /// <param name="subtree">Start from a certain node</param>
     /// <returns>The smallest node</returns>
-    public Node<T> Minimum(Node<T>? subtree)
+    public Node Minimum(Node? subtree)
     {
-        Node<T> current = subtree ?? root;
+        Node current = subtree ?? root;
         if (current == null)
-            return new Node<T>(new T());
+            return new Node(new T());
         while (current.LeftChild != null)
         {
             current = current.LeftChild;
@@ -162,11 +172,11 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
     /// </summary>
     /// <param name="subtree">Start from a certain node</param>
     /// <returns>The greatest node</returns>
-    public Node<T> Maximum(Node<T>? subtree)
+    public Node Maximum(Node? subtree)
     {
-        Node<T> current = subtree ?? root;
+        Node current = subtree ?? root;
         if (current == null)
-            return new Node<T>(new T());
+            return new Node(new T());
         while (current.RightChild != null)
         {
             current = current.RightChild;
@@ -179,9 +189,9 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
     /// </summary>
     /// <param name="data">Data to search for</param>
     /// <returns>The node containing the data</returns>
-    public Node<T> Search(T data)
+    public Node Search(T data)
     {
-        Node<T> current = root;
+        Node current = root;
         while (current != null && !data.Equals(current.Data))
         {
             if (data.CompareTo(current.Data) == -1)
@@ -189,7 +199,7 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
             else
                 current = current.RightChild;
         }
-        return current ?? new Node<T>(new T());
+        return current ?? new Node(new T());
     }
 
     /// <summary>
@@ -197,11 +207,11 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
     /// </summary>
     /// <param name="node">Node</param>
     /// <returns>The predecessor of the node</returns>
-    public Node<T> Predecessor(Node<T> node)
+    public Node Predecessor(Node node)
     {
         if (node.LeftChild != null)
             return Maximum(node.LeftChild);
-        Node<T> parent = node.Parent;
+        Node parent = node.Parent;
         while (parent != null && node == parent.LeftChild)
         {
             node = parent;
@@ -216,11 +226,11 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
     /// </summary>
     /// <param name="node">Node</param>
     /// <returns>The successor of the node</returns>
-    public Node<T> Successor(Node<T> node)
+    public Node Successor(Node node)
     {
         if (node.RightChild != null)
             return Minimum(node.RightChild);
-        Node<T> parent = node.Parent;
+        Node parent = node.Parent;
         while (parent != null && node == parent.RightChild)
         {
             node = parent;
@@ -236,7 +246,7 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
     /// <returns>The enumerator.</returns>
     public IEnumerator<T> GetEnumerator()
     {
-        Node<T> current = Minimum(root);
+        Node current = Minimum(root);
         while (current != null)
         {
             yield return current.Data;
