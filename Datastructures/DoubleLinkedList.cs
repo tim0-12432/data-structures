@@ -82,13 +82,13 @@ public class DoubleLinkedList<T> : IEnumerable<T>
         }
     }
 
-    private ListElement<T> _first = null;
-    private ListElement<T> _last = null;
+    protected ListElement<T> _first = null;
+    protected ListElement<T> _last = null;
     
     /// <summary>
     /// List length.
     /// </summary>
-    public int Length { get; private set; } = 0;
+    public int Length { get; protected set; } = 0;
 
     /// <summary>
     /// Append data at the end of the list.
@@ -148,6 +148,7 @@ public class DoubleLinkedList<T> : IEnumerable<T>
     /// </summary>
     /// <param name="data">Data of the other element</param>
     /// <param name="element">Data to insert</param>
+    /// <exception cref="ArgumentException">Data does not exist</exception>
     public void InsertAfter(T data, T element) {
         ListElement<T> current = _first;
         while (current != null && !current.Data.Equals(data))
@@ -167,6 +168,7 @@ public class DoubleLinkedList<T> : IEnumerable<T>
     /// </summary>
     /// <param name="data">Data of the other element</param>
     /// <param name="element">Element to insert</param>
+    /// <exception cref="ArgumentException">Data does not exist</exception>
     public void InsertAfter(T data, ListElement<T> element) {
         InsertAfter(data, element.Data);
     }

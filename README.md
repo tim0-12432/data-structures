@@ -21,6 +21,8 @@ Originated through my preparation for the exams in modules `Object-Oriented Prog
 |Successor|the following element in the list|
 |Predecessor|the element in the list before the current one|
 
+### Circular double linked list :heavy_check_mark:
+
 ## Stack :heavy_check_mark:
 
 ![stack](./doc/images/stack.png)
