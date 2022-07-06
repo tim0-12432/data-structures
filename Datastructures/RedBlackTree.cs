@@ -2,8 +2,14 @@
 
 public class RedBlackTree<T> : BinaryTree<T> where T : IComparable, new()
 {
+    /// <summary>
+    /// Available colors.
+    /// </summary>
     public enum Color { Red, Black }
     
+    /// <summary>
+    /// A single tree node.
+    /// </summary>
     public class RBNode : Node
     {
         /// <summary>
@@ -86,7 +92,44 @@ public class RedBlackTree<T> : BinaryTree<T> where T : IComparable, new()
     /// <returns>The removed data</returns>
     public T Delete(RBNode element)
     {
-        return base.Delete(element);
+        (T, Node) result = DeleteNode(element);
+        RBNode y = result.Item2 as RBNode;
+        if (y != null && y.RightChild != null && y.RightChild.LeftChild != null)
+        {
+            RBNode x = y.RightChild.LeftChild as RBNode;
+            if (y.Color == Color.Red)
+            {
+                x.Color = Color.Black;
+            }
+            else
+            {
+                x.Color = Color.Black;
+                if (x.Parent != null)
+                {
+                    RBNode w = x.GetSibling() as RBNode;
+                    if (w != null && w.Color == Color.Red)
+                        LeftRotate(w);
+                    else if (w != null && w.Color == Color.Black
+                                       && (w.LeftChild as RBNode).Color == Color.Black
+                                       && (w.RightChild as RBNode).Color == Color.Black)
+                        w.Color = Color.Black;
+                    else if (w != null && w.Color == Color.Black
+                                       && (w.LeftChild as RBNode).Color == Color.Red
+                                       && (w.RightChild as RBNode).Color == Color.Black)
+                    {
+                        w.Color = Color.Red;
+                        RightRotate(w);
+                    }
+                    else if (w != null && w.Color == Color.Black
+                                       && (w.LeftChild as RBNode).Color == Color.Black
+                                       && (w.RightChild as RBNode).Color == Color.Red)
+                        LeftRotate(w.Parent);
+                }
+            }
+        }
+        if (root != null)
+            (root as RBNode).Color = Color.Black;
+        return result.Item1;
     }
 
     /// <summary>

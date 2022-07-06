@@ -65,6 +65,22 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
                 return Parent.RightChild.Data.Equals(Data);
             return false;
         }
+
+        /// <summary>
+        /// Get the sibling of a node.
+        /// </summary>
+        /// <returns>The sibling</returns>
+        public Node GetSibling()
+        {
+            if (Parent != null)
+            {
+                if (IsLeftChild())
+                    return Parent.RightChild;
+                return Parent.LeftChild;
+            }
+
+            return null;
+        }
     }
     
     /// <summary>
@@ -146,6 +162,11 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
     /// <returns>The removed data</returns>
     public T Delete(Node element)
     {
+        return DeleteNode(element).Item1;
+    }
+
+    protected (T, Node) DeleteNode(Node element)
+    {
         Node parent = element.Parent;
         Node transplantation = null;
         if (element.LeftChild == null && element.RightChild == null)
@@ -169,7 +190,7 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
             parent.RightChild = transplantation;
         if (parent != null)
             transplantation.Parent = parent;
-        return element.Data;
+        return (element.Data, transplantation);
     }
 
     /// <summary>

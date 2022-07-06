@@ -6,19 +6,7 @@ namespace DatastructuresTests;
 public class RedBlackTreeTest
 {
     [Test]
-    public void TestInsertInt()
-    {
-        RedBlackTree<int> tree = new RedBlackTree<int>();
-        for (int i = 0; i <= 10; i++)
-            tree.Insert(new Random().Next(0, 51));
-        tree.Insert(5);
-        Assert.That(tree.Validate(), Is.True);
-        Console.WriteLine(tree);
-        Assert.That(tree.Search(5).Data, Is.EqualTo(5));
-    }
-    
-    [Test]
-    public void TestInsertChar()
+    public void TestInsert()
     {
         RedBlackTree<char> tree = new RedBlackTree<char>();
         for (int i = 0; i <= 10; i++)

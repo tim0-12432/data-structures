@@ -37,7 +37,7 @@ Originated through my preparation for the exams in modules `Object-Oriented Prog
 
 ## Binary Tree :heavy_check_mark:
 
-## Red-Black-Tree :x:
+## Red-Black-Tree :heavy_check_mark:
 
 ## B-Tree :x:
 
