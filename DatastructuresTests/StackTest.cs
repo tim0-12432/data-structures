@@ -14,6 +14,9 @@ public class StackTest
         Assert.False(stack.IsEmpty());
         Assert.AreEqual(11, stack.Height);
         Assert.AreEqual(10, stack.Peek());
+        stack.Push(11, 12, 13, 14, 15);
+        Assert.AreEqual(16, stack.Height);
+        Assert.AreEqual(15, stack.Peek());
     }
     
     [Test]
@@ -29,6 +32,8 @@ public class StackTest
         Assert.AreEqual(8, stack.Pop());
         Assert.AreEqual(7, stack.Pop());
         Assert.AreEqual(6, stack.Pop());
+        stack.Pop(3);
+        Assert.AreEqual(2, stack.Peek());
     }
     
     [Test]

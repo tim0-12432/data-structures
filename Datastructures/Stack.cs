@@ -59,6 +59,17 @@ public class Stack<T> : IEnumerable<T>
     }
 
     /// <summary>
+    /// Insert data on top of the stack.
+    /// </summary>
+    /// <param name="data">Data</param>
+    /// <exception cref="StackOverflowException">Stack is filled</exception>
+    public void Push(params T[] data)
+    {
+        foreach (T item in data)
+            Push(item);
+    }
+
+    /// <summary>
     /// Delete data from top of the stack.
     /// </summary>
     /// <returns>The removed data</returns>
@@ -71,6 +82,20 @@ public class Stack<T> : IEnumerable<T>
         topOfStack = elem.Next;
         Height--;
         return elem.Data;
+    }
+
+    /// <summary>
+    /// Delete data from top of the stack.
+    /// </summary>
+    /// <param name="count">How often should be popped?</param>
+    /// <returns>The removed data</returns>
+    /// <exception cref="InvalidOperationException">Stack is empty</exception>
+    public T[] Pop(uint count)
+    {
+        T[] result = new T[count];
+        for (int i = 0; i < count; i++)
+            result[i] = Pop();
+        return result;
     }
 
     /// <summary>

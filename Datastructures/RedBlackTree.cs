@@ -42,7 +42,7 @@ public class RedBlackTree<T> : BinaryTree<T> where T : IComparable, new()
     /// <summary>
     /// Constructor.
     /// </summary>
-    public RedBlackTree() : base() {}
+    public RedBlackTree() {}
     
     /// <summary>
     /// Insert a new node in the tree.
