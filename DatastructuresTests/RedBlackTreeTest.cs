@@ -10,7 +10,7 @@ public class RedBlackTreeTest
     {
         RedBlackTree<char> tree = new RedBlackTree<char>();
         for (int i = 0; i <= 10; i++)
-            tree.Insert((char)new Random().Next(0, 51));
+            tree.Insert((char)new Random().Next(0, 23));
         tree.Insert('+');
         Assert.True(tree.Validate());
         Console.WriteLine(tree);

@@ -303,7 +303,7 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
     /// <returns>A string representation</returns>
     public override string ToString()
     {
-        StringBuilder builder = new StringBuilder("BinaryTree=[");
+        StringBuilder builder = new StringBuilder($"{this.GetType().Name.Split('`')[0]}=[");
         foreach (T data in this)
             builder.Append($"{data},");
         if (!'['.Equals(builder[^1]))
