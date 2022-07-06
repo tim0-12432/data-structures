@@ -6,15 +6,27 @@ namespace DatastructuresTests;
 public class RedBlackTreeTest
 {
     [Test]
-    public void TestInsert()
+    public void TestIntInsert()
+    {
+        RedBlackTree<int> tree = new RedBlackTree<int>();
+        for (int i = 0; i <= 10; i++)
+            tree.Insert((int)(i * 3 * 0.5));
+        tree.Insert(62);
+        Console.WriteLine(tree);
+        Assert.True(tree.Validate());
+        Assert.That(tree.Search(62).Data, Is.EqualTo(62));
+    }
+    
+    [Test]
+    public void TestCharInsert()
     {
         RedBlackTree<char> tree = new RedBlackTree<char>();
         for (int i = 0; i <= 10; i++)
-            tree.Insert((char)new Random().Next(0, 23));
-        tree.Insert('+');
-        Assert.True(tree.Validate());
+            tree.Insert((char)(i * 3 * 0.5));
+        tree.Insert('$');
         Console.WriteLine(tree);
-        Assert.That(tree.Search('+').Data, Is.EqualTo('+'));
+        Assert.True(tree.Validate());
+        Assert.That(tree.Search('$').Data, Is.EqualTo('$'));
     }
     
     [Test]
