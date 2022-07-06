@@ -43,6 +43,28 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
             Data = data;
             LeftChild = Parent = RightChild = null;
         }
+
+        /// <summary>
+        /// Checks if node is left child.
+        /// </summary>
+        /// <returns>Is left child</returns>
+        public bool IsLeftChild()
+        {
+            if (Parent != null && Parent.LeftChild != null)
+                return Parent.LeftChild.Data.Equals(Data);
+            return false;
+        }
+        
+        /// <summary>
+        /// Checks if node is right child.
+        /// </summary>
+        /// <returns>Is right child</returns>
+        public bool IsRightChild()
+        {
+            if (Parent != null && Parent.RightChild != null)
+                return Parent.RightChild.Data.Equals(Data);
+            return false;
+        }
     }
     
     /// <summary>
@@ -272,5 +294,31 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
+    }
+    
+    protected void LeftRotate(Node node)
+    {
+        Node leftTree = node.Parent;
+        Node parent = node.Parent.Parent;
+        if (node.Parent.IsLeftChild())
+            node.Parent.Parent.LeftChild = node;
+        else if (node.Parent.IsRightChild())
+            node.Parent.Parent.RightChild = node;
+        node.Parent = parent;
+        leftTree.RightChild = node.LeftChild;
+        node.LeftChild = leftTree;
+    }
+    
+    protected void RightRotate(Node node)
+    {
+        Node rightTree = node.Parent;
+        Node parent = node.Parent.Parent;
+        if (node.Parent.IsLeftChild())
+            node.Parent.Parent.LeftChild = node;
+        else if (node.Parent.IsRightChild())
+            node.Parent.Parent.RightChild = node;
+        node.Parent = parent;
+        rightTree.LeftChild = node.RightChild;
+        node.RightChild = rightTree;
     }
 }

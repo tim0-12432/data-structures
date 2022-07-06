@@ -9,10 +9,10 @@ public class RedBlackTreeTest
     public void TestInsertInt()
     {
         RedBlackTree<int> tree = new RedBlackTree<int>();
-        for (int i = 0; i <= 50; i++)
+        for (int i = 0; i <= 10; i++)
             tree.Insert(new Random().Next(0, 51));
         tree.Insert(5);
-        Assert.True(tree.Validate());
+        Assert.That(tree.Validate(), Is.True);
         Console.WriteLine(tree);
         Assert.That(tree.Search(5).Data, Is.EqualTo(5));
     }
@@ -21,7 +21,7 @@ public class RedBlackTreeTest
     public void TestInsertChar()
     {
         RedBlackTree<char> tree = new RedBlackTree<char>();
-        for (int i = 0; i <= 50; i++)
+        for (int i = 0; i <= 10; i++)
             tree.Insert((char)new Random().Next(0, 51));
         tree.Insert('+');
         Assert.True(tree.Validate());

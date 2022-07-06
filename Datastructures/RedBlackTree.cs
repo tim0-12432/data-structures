@@ -2,7 +2,7 @@
 
 public class RedBlackTree<T> : BinaryTree<T> where T : IComparable, new()
 {
-    public enum Color { RED, BLACK }
+    public enum Color { Red, Black }
     
     public class RBNode : Node
     {
@@ -17,7 +17,7 @@ public class RedBlackTree<T> : BinaryTree<T> where T : IComparable, new()
         /// <param name="data">The data to contain</param>
         public RBNode(T data) : base(data)
         {
-            Color = Color.RED;
+            Color = Color.Red;
         }
     }
     
@@ -28,7 +28,7 @@ public class RedBlackTree<T> : BinaryTree<T> where T : IComparable, new()
     public RedBlackTree(T root)
     {
         RBNode node = new RBNode(root);
-        node.Color = Color.BLACK;
+        node.Color = Color.Black;
         this.root = node;
         Height = 1;
     }
@@ -46,7 +46,37 @@ public class RedBlackTree<T> : BinaryTree<T> where T : IComparable, new()
     {
         RBNode newElement = new RBNode(data);
         Insert(newElement);
-        (root as RBNode).Color = Color.BLACK;
+        (root as RBNode).Color = Color.Black;
+        if (newElement.Parent != null
+            && newElement.Parent.Parent != null
+            && newElement.Parent.Parent.LeftChild != null
+            && newElement.Parent.Parent.RightChild != null
+            && (newElement.Parent as RBNode).Color == Color.Red)
+        {
+            if ((newElement.Parent.Parent.LeftChild as RBNode).Color == Color.Red && (newElement.Parent.Parent.RightChild as RBNode).Color == Color.Red)
+            {
+                if (newElement.Parent.IsLeftChild())
+                {
+                    (newElement.Parent.Parent.RightChild as RBNode).Color = Color.Black;
+                }
+                else if (newElement.Parent.IsRightChild())
+                {
+                    (newElement.Parent.Parent.LeftChild as RBNode).Color = Color.Black;
+                }
+
+                (newElement.Parent as RBNode).Color = Color.Black;
+                (newElement.Parent.Parent as RBNode).Color = Color.Red;
+            }
+            if (newElement.Parent.IsLeftChild() && (newElement.Parent.Parent.RightChild as RBNode).Color == Color.Black
+                || newElement.Parent.IsRightChild() && (newElement.Parent.Parent.LeftChild as RBNode).Color == Color.Black)
+            {
+                if (newElement.IsLeftChild())
+                    RightRotate(newElement.Parent);
+                else if (newElement.IsRightChild())
+                    LeftRotate(newElement.Parent);
+            }
+        }
+        (root as RBNode).Color = Color.Black;
     }
 
     /// <summary>
@@ -81,16 +111,31 @@ public class RedBlackTree<T> : BinaryTree<T> where T : IComparable, new()
     /// <returns>Validation result</returns>
     public bool Validate()
     {
-        if ((root as RBNode).Color != Color.BLACK && root != null)
+        if ((root as RBNode).Color != Color.Black && root != null)
             return false;
-        RBNode current = Minimum(root) as RBNode;
-        while (current != null)
-        {
-            if (current.Color != Color.RED && current.Color != Color.BLACK)
-                return false;
-            current = Successor(current) as RBNode;
-        }
+
+        if (GetBlackHeight(root as RBNode, 0) == -1)
+            return false;
 
         return true;
+    }
+
+    private int GetBlackHeight(RBNode node, int blackHeight)
+    {
+        RBNode left = node.LeftChild as RBNode;
+        RBNode right = node.RightChild as RBNode;
+        if (left == null || right == null)
+            return blackHeight;
+        if (node.Color == Color.Red && (left.Color != Color.Black || right.Color != Color.Black))
+            return -1;
+
+        int currBlackHeight = blackHeight;
+        if (node.Color == Color.Black)
+            currBlackHeight++;
+        int lTree = GetBlackHeight(left, currBlackHeight);
+        int rTree = GetBlackHeight(right, currBlackHeight);
+        if (lTree != rTree)
+            return -1;
+        return lTree;
     }
 }
