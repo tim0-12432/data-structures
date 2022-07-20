@@ -308,7 +308,7 @@ public class BinaryTree<T> : IEnumerable<T> where T : IComparable, new()
             builder.Append($"{data},");
         if (!'['.Equals(builder[^1]))
             builder.Remove(builder.Length - 1, 1);
-        builder.Append("],");
+        builder.Append(']');
         return builder.ToString();
     }
 
