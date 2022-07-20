@@ -8,17 +8,32 @@ namespace Datastructures;
 /// <typeparam name="T">Type</typeparam>
 public class Hashtable<T> where T : new()
 {
-    private static readonly int MAX_TABLE_SIZE = 50;
-    private LinkedList<T>[] table = new LinkedList<T>[MAX_TABLE_SIZE];
+    private readonly int _maxTableSize = 50;
+    private readonly LinkedList<T>[] _table;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     public Hashtable()
     {
-        for (int i = 0; i < MAX_TABLE_SIZE; i++)
+        _table = new LinkedList<T>[_maxTableSize];
+        for (int i = 0; i < _maxTableSize; i++)
         {
-            table[i] = new LinkedList<T>();
+            _table[i] = new LinkedList<T>();
+        }
+    }
+    
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="m">Maximum table size</param>
+    public Hashtable(uint m)
+    {
+        _maxTableSize = (int)m;
+        _table = new LinkedList<T>[m];
+        for (int i = 0; i < m; i++)
+        {
+            _table[i] = new LinkedList<T>();
         }
     }
 
@@ -29,7 +44,7 @@ public class Hashtable<T> where T : new()
     public void Insert(T data)
     {
         int index = GetHash(data);
-        table[index].AddFirst(data);
+        _table[index].AddFirst(data);
     }
 
     /// <summary>
@@ -40,8 +55,8 @@ public class Hashtable<T> where T : new()
     public T Delete(T data)
     {
         int index = GetHash(data);
-        LinkedListNode<T> element = table[index].Find(data);
-        table[index].Remove(data);
+        LinkedListNode<T> element = _table[index].Find(data);
+        _table[index].Remove(data);
         return element == null ? new T() : element.Value;
     }
 
@@ -53,7 +68,7 @@ public class Hashtable<T> where T : new()
     public T Search(T data)
     {
         int index = GetHash(data);
-        LinkedListNode<T> element = table[index].Find(data);
+        LinkedListNode<T> element = _table[index].Find(data);
         return element == null ? new T() : element.Value;
     }
 
@@ -64,9 +79,9 @@ public class Hashtable<T> where T : new()
     public override string ToString()
     {
         StringBuilder builder = new StringBuilder("Hashtable=[");
-        foreach (LinkedList<T> cell in table)
+        foreach (LinkedList<T> cell in _table)
         {
-            builder.Append("[");
+            builder.Append('[');
             foreach (T elem in cell)
             {
                 builder.Append($"{elem},");
@@ -76,7 +91,7 @@ public class Hashtable<T> where T : new()
             builder.Append("],");
         }
         builder.Remove(builder.Length - 1, 1);
-        return builder.Append("]").ToString();
+        return builder.Append(']').ToString();
     }
 
     private int GetHash(T data)
@@ -89,6 +104,6 @@ public class Hashtable<T> where T : new()
         else
             number = data.GetHashCode();
 
-        return Convert.ToInt32(Math.Floor(8 * (number * (Math.Sqrt(5) - 1) / 2) % 701)) % MAX_TABLE_SIZE;
+        return Convert.ToInt32(Math.Floor(8 * (number * (Math.Sqrt(5) - 1) / 2) % 701)) % _maxTableSize;
     }
 }
