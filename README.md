@@ -8,18 +8,18 @@ Originated through my preparation for the exams in modules `Object-Oriented Prog
 
 ![single linked list](./doc/images/single-linked-list.png)
 
-|Reference|Note|
-|---|---|
-|Successor|the following element in the list|
+| Reference  | Note                              |
+|------------|-----------------------------------|
+| Successor  | the following element in the list |
 
 ## Double linked list :heavy_check_mark:
 
 ![double linked list](./doc/images/double-linked-list.png)
 
-|Reference|Note|
-|---|---|
-|Successor|the following element in the list|
-|Predecessor|the element in the list before the current one|
+| Reference   | Note                                           |
+|-------------|------------------------------------------------|
+| Successor   | the following element in the list              |
+| Predecessor | the element in the list before the current one |
 
 ### Circular double linked list :heavy_check_mark:
 
@@ -37,10 +37,36 @@ Originated through my preparation for the exams in modules `Object-Oriented Prog
 
 ## Binary Tree :heavy_check_mark:
 
+![binary tree](./doc/images/binary-tree.png)
+
+| Reference  | Note                           |
+|------------|--------------------------------|
+| Parent     | the parent element in the tree |
+| LeftChild  | the element following left     |
+| RightChild | the element following right    |
+
 ## Red-Black-Tree :heavy_check_mark:
+
+![red black tree (black height=2)](./doc/images/rb-tree.png)
+
+## Heap :heavy_check_mark:
+
+![max heap](./doc/images/max-heap.png)
 
 ## B-Tree :x:
 
-## Heap :x:
+![b tree (k=2)](./doc/images/b-tree.png)
 
-## Fibonacci-Heap :x:
+## Fibonacci-Heap :heavy_check_mark:
+
+![fibonacci heap](./doc/images/fib-heap.png)
+
+| Reference/Attribute | Note                           |
+|---------------------|--------------------------------|
+| Parent              | the parent element in the tree |
+| LeftSibling         | the element following left     |
+| RightSibling        | the element following right    |
+| Child               | the children in a list         |
+| Degree              | amount of children             |
+| Mark                | flag set when lost a child     |
+| Key                 | priority of the node           |

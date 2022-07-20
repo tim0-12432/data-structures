@@ -8,101 +8,44 @@ public class BTree<T> where T : IComparable, new()
     {
         private readonly uint nodeDegree;
         
-        private List<T> nodeList = new List<T>();
+        public List<T> Values { get; set; } = new List<T>();
 
-        private List<Node> references = new List<Node>();
+        public List<Node> Children { get; set; } = new List<Node>();
+
+        public bool IsLeaf { get; set; } = false;
         
         public Node Parent { get; set; }
 
         public Node(uint nodeDegree, T data)
         {
             this.nodeDegree = nodeDegree;
-            nodeList.Add(data);
-        }
-
-        public T GetNodeData(uint index)
-        {
-            return nodeList[(int)index];
+            Values.Add(data);
         }
         
-        public Node GetReference(uint index)
+        public Node(uint nodeDegree)
         {
-            return references[(int)index];
-        }
-        
-        public void SetNodeData(uint index, T data)
-        {
-            nodeList[(int)index] = data;
-        }
-        
-        public void SetReference(uint index, Node reference)
-        {
-            references[(int)index] = reference;
-        }
-
-        public T this[uint index]
-        {
-            get => GetNodeData(index);
-            set => SetNodeData(index, value);
+            this.nodeDegree = nodeDegree;
         }
 
         public bool Validate()
         {
-            if (nodeList.Count > 2 * nodeDegree - 1 || nodeList.Count < nodeDegree - 1)
+            if (Values.Count > 2 * nodeDegree - 1 || Values.Count < nodeDegree - 1)
                 return false;
-            if (references.Count > 2 * nodeDegree)
-                return false;
-            if (references.Count != nodeList.Count + 1)
+            if (Children.Count != Values.Count + 1)
                 return false;
             return true;
         }
 
         public bool ShouldSplit()
         {
-            if (nodeList.Count >= 2 * nodeDegree - 1)
+            if (Values.Count >= 2 * nodeDegree - 1)
                 return true;
             return false;
         }
 
-        public int GetNodeIndex(T data)
-        {
-            T result = nodeList.Find(d => d.Equals(data));
-            if (result == null)
-                return -1;
-            return nodeList.IndexOf(result);
-        }
-
-        public int GetReferenceIndex(T data)
-        {
-            if (GetNodeIndex(data) == -1)
-            {
-                if (nodeList[0].CompareTo(data) > 0)
-                    return 0;
-                T before;
-                for (int i = 0; i < nodeList.Count; i++)
-                {
-                    if (nodeList[i].CompareTo(data) < 0)
-                        before = nodeList[i];
-                    else if (nodeList[i].CompareTo(data) > 0)
-                        return i - 1;
-                }
-
-                return nodeList.Count;
-            }
-            return -1;
-        }
-
         public IEnumerator GetEnumerator()
         {
-            return nodeList.GetEnumerator();
-        }
-
-        public void Split()
-        {
-            if (ShouldSplit())
-            {
-                int midIdx = nodeList.Count / 2;
-            }
+            return Values.GetEnumerator();
         }
     }
 
@@ -110,34 +53,264 @@ public class BTree<T> where T : IComparable, new()
 
     private Node root = null;
     
+    public uint Size { get; private set; }
+
     public uint Height { get; private set; } = 0;
     
     public BTree(uint degree)
     {
         nodeDegree = degree;
     }
-
-    public T Search(T key)
+    
+    public BTree()
     {
-        Node current = root;
-        while (current != null)
+    }
+
+    public bool IsEmpty() => Size == 0; 
+    
+
+    public T Search(T value)
+    {
+        if (root != null)
+            return new T();
+
+        return Find(root, value);
+    }
+
+    private T Find(Node root, T k)
+    {
+        List<T> values = root.Values;
+
+        int i = values.Count - 1;
+
+        if (k.CompareTo(values[i]) > 0)
+            i++;
+        else
         {
-            int listIndex = current.GetNodeIndex(key);
-            if (listIndex != -1)
-                return current.GetNodeData(Convert.ToUInt32(listIndex));
-            current = current.GetReference(Convert.ToUInt32(current.GetReferenceIndex(key)));
+            while (i > 0 && k.CompareTo(values[i]) < 0)
+                i--;
+
+            if (k.CompareTo(values[i]) > 0)
+                i++;
         }
 
-        return new T();
+        if (i < values.Count && k.CompareTo(values[i]) == 0)
+            return root.Values[i];
+        if (root.IsLeaf)
+            return new T();
+        return Find(root.Children[i], k);
     }
 
     public void Insert(T data)
     {
-        
+        if (root != null && root.ShouldSplit())
+        {
+            Node newRoot = new Node(nodeDegree, data);
+            newRoot.IsLeaf = false;
+            newRoot.Children.Add(root);
+
+            SplitChild(newRoot, 0);
+
+            Height++;
+
+            InsertHelper(newRoot, data);
+        }
+        else if (root == null)
+        {
+            InsertHelper(root, data);
+        }
+        else
+        {
+            root = new Node(nodeDegree, data);
+            root.IsLeaf = true;
+            
+            Height++;
+        }
+
+        Size++;
     }
 
-    public T Delete(T key)
+    private void InsertHelper(Node node, T data)
     {
+        if (node.IsLeaf)
+        {
+            int i = node.Values.Count - 1;
+
+            if (data.CompareTo(node.Values[i]) > 0)
+                node.Values.Insert(i + 1, data);
+            else
+            {
+                while (i > 0 && data.CompareTo(node.Values[i]) < 0)
+                    i--;
+
+                if (data.CompareTo(node.Values[i]) > 0)
+                    i++;
+                
+                node.Values.Insert(i, data);
+            }
+        }
+        else
+        {
+            int i = node.Values.Count - 1;
+            
+            while (i > 0 && data.CompareTo(node.Values[i]) < 0)
+                i--;
+
+            i++;
+
+            if (node.Children[i].ShouldSplit())
+            {
+                SplitChild(node.Children[i], Convert.ToUInt32(i));
+                if (data.CompareTo(node.Values[i]) > 0)
+                    i++;
+            }
+            
+            InsertHelper(node.Children[i], data);
+        }
+    }
+
+    private void SplitChild(Node x, uint i)
+    {
+        Node y = x.Children[(int)i];
+        T medianValue = y.Values[((int)nodeDegree - 1)];
+
+        Node z = new Node(nodeDegree);
+        z.IsLeaf = y.IsLeaf;
+
+        uint firstValueAfterMiddle = nodeDegree;
+        for (uint j = firstValueAfterMiddle; j < nodeDegree * 2 - 1; j++)
+            z.Values.Add(y.Values[(int)j]);
+
+        if (!y.IsLeaf) {
+            uint firstChildOfSecondHalf = nodeDegree;
+            for (uint j = firstChildOfSecondHalf; j < nodeDegree * 2; j++)
+                z.Children.Add(y.Children[(int)j]);
+        }
+
+        y.Values = y.Values.GetRange(0, (int)nodeDegree - 1);
+        if (!y.IsLeaf) y.Children = y.Children.GetRange(0, (int)nodeDegree);
+
+        x.Children.Insert((int)i + 1, z);
+
+        x.Values.Insert((int)i, medianValue);
+    }
+
+    public void Delete(T key)
+    {
+        if (root == null) return;
+
+        Delete(root, key);
+
+        if (root.Values.Count == 0)
+        {
+            root = root.Children[0];
+            Height--;
+        }
+    }
+
+    private void Delete(Node x, T k)
+    {
+        int i = x.Values.Count - 1;
         
+        if (k.CompareTo(x.Values[i]) > 0)
+            i++;
+        else
+        {
+            while (i > 0 && k.CompareTo(x.Values[i]) < 0)
+                i--;
+        }
+
+        bool valueIsInX = i < x.Values.Count && x.Values[i].Equals(k);
+        
+        if (valueIsInX && x.IsLeaf) {
+            x.Values.Insert(i, new T());
+            return;
+        }
+        if (valueIsInX && !x.IsLeaf)
+        {
+            Node y = x.Children[i];
+            Node z = x.Children[i + 1];
+
+            if (y.Values.Count >= nodeDegree)
+            {
+                x.Values[i] = y.Values[^1];
+
+                y.Values = y.Values.GetRange(0, y.Values.Count - 1);
+            }
+            else if (z.Values.Count >= nodeDegree)
+            {
+                x.Values[i] = z.Values[0];
+
+                z.Values.Insert(0, new T());
+            } else {
+                foreach (T value in z.Values)
+                    y.Values.Add(value);
+
+                x.Values.Insert(i, new T());
+
+                x.Children.Insert(i + 1, new Node(nodeDegree));
+            }
+        }
+
+        if (x.IsLeaf) return;
+
+        if (x.Children[i].Values.Count == nodeDegree - 1)
+        {
+            bool childHasRightSibling = i < x.Children.Count - 1;
+              bool rightSiblingHasValuesToGive = x.Children[i + 1].Values.Count >= nodeDegree;
+              if (childHasRightSibling && rightSiblingHasValuesToGive)
+              {
+                  x.Children[i].Values.Add(x.Values[i]);
+
+                T firstValueOfRightSibling = x.Children[i + 1].Values[0];
+                if (firstValueOfRightSibling == null)
+                    throw new ArgumentException();
+                x.Values[i] = firstValueOfRightSibling;
+              }
+
+              bool childHasLeftSibling = i > 0;
+              bool leftSiblingHasValuesToGive = x.Children[i - 1].Values.Count >= nodeDegree;
+
+              if (childHasLeftSibling && leftSiblingHasValuesToGive)
+              {
+                  x.Children[i].Values.Add(x.Values[i]);
+
+                    T lastValueOfLeftSibling = x.Children[i + 1].Values[0];
+                    x.Children[i + 1].Values.RemoveAt(0);
+                    if (lastValueOfLeftSibling == null) throw new ArgumentException();
+                    x.Values[i] = lastValueOfLeftSibling;
+              }
+
+              if (childHasRightSibling)
+              {
+                  Node child = x.Children[i];
+                  Node rightSibling = x.Children[i + 1];
+
+                    child.Values.Add(x.Values[i]);
+
+                    foreach (T value in rightSibling.Values)
+                        child.Values.Add(value);
+
+                    x.Values.Insert(i, new T());
+
+                    x.Children.Insert(i + 1, new Node(nodeDegree));
+              }
+              else
+              {
+                  Node child = x.Children[i];
+                  Node leftSibling = x.Children[i - 1];
+
+                  child.Values.Add(x.Values[i]);
+
+                foreach (T value in leftSibling.Values)
+                    child.Values.Add(value);
+
+                x.Values.Insert(i, new T());
+
+                x.Children.Insert(i - 1, new Node(nodeDegree));
+              }
+        }
+
+        Delete(x.Children[i], k);
     }
 }
