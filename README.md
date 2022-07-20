@@ -57,7 +57,7 @@ Originated through my preparation for the exams in modules `Object-Oriented Prog
 
 ![b tree (k=2)](./doc/images/b-tree.png)
 
-## Fibonacci-Heap :x:
+## Fibonacci-Heap :heavy_check_mark:
 
 ![fibonacci heap](./doc/images/fib-heap.png)
 
