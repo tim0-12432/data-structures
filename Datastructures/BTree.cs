@@ -117,6 +117,7 @@ public class BTree<T> where T : IComparable, new()
         }
         else if (root == null)
         {
+            root = new Node(nodeDegree, data);
             InsertHelper(root, data);
         }
         else
@@ -132,7 +133,7 @@ public class BTree<T> where T : IComparable, new()
 
     private void InsertHelper(Node node, T data)
     {
-        if (node.IsLeaf)
+        if (node != null && node.IsLeaf)
         {
             int i = node.Values.Count - 1;
 
@@ -181,7 +182,8 @@ public class BTree<T> where T : IComparable, new()
         for (uint j = firstValueAfterMiddle; j < nodeDegree * 2 - 1; j++)
             z.Values.Add(y.Values[(int)j]);
 
-        if (!y.IsLeaf) {
+        if (!y.IsLeaf)
+        {
             uint firstChildOfSecondHalf = nodeDegree;
             for (uint j = firstChildOfSecondHalf; j < nodeDegree * 2; j++)
                 z.Children.Add(y.Children[(int)j]);
@@ -242,7 +244,9 @@ public class BTree<T> where T : IComparable, new()
                 x.Values[i] = z.Values[0];
 
                 z.Values.Insert(0, new T());
-            } else {
+            }
+            else
+            {
                 foreach (T value in z.Values)
                     y.Values.Add(value);
 
