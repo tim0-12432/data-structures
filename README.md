@@ -4,6 +4,8 @@
 
 Originated through my preparation for the exams in modules `Object-Oriented Programming` and `Algorithms and Datastructures`. 
 
+<img alt="Meme" height="350px" src="https://img.devrant.com/devrant/rant/r_1943776_fHeSA.jpg" />
+
 ## Single linked list :heavy_check_mark:
 
 ![single linked list](./doc/images/single-linked-list.png)
